@@ -1,0 +1,23 @@
+---
+- name: ホスト上のユーザー一覧を取得
+  hosts: all
+  tasks:
+    - name: /etc/passwdからユーザー名を抜き出し
+      command: cut --delimiter=':' --fields=1 /etc/passwd
+      register: usernames_result
+      changed_when: false
+    - name: usernames_result変数をデバッグ表示
+      debug:
+        var: usernames_result.stdout_lines
+    - name: コマンド実行結果から存在するユーザー名のリストを生成
+      set_fact:
+        username_list: "{{ usernames_result.stdout_lines }}"
+    - name: vagrantユーザーが存在する場合にメッセージを表示
+      debug:
+        msg: このマシンにはvagrantユーザーが存在します
+      when: "'vagrant' in username_list"
+    - name: すべてのユーザーが実在するか確認
+      user:
+        name: "{{item}}"
+        createhome: false
+      with_items: "{{ username_list }}"
