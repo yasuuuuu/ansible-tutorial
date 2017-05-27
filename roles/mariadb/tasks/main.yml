@@ -25,7 +25,7 @@
 - name: システム用データベースの作成
   mysql_db:
     name: "{{item.name}}"
-    encording: "{{item.encoding|default('utf8')}}"
+    encoding: "{{item.encoding|default('utf8')}}"
     collation: "{{item.collation|default('utf8_general_ci')}}"
   with_items: "{{mariadb_databases}}"
 
