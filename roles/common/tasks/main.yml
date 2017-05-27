@@ -26,7 +26,7 @@
       port: "{{ansible_ssh_port|default(22)}}"
       state: started
       search_regex: OpenSSH
-      delay: 60
+      delay: 80
       timeout: 600
     become: false
   when: common_make_selinux_permissive|changed and 'state change will take effect next reboot' in common_make_selinux_permissive.msg
